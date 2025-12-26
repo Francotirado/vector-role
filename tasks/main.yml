@@ -1,0 +1,43 @@
+#SPDX-License-Identifier: MIT-0
+---
+- name: Get vector distrib
+  ansible.builtin.get_url:
+    url: "https://packages.timber.io/vector/{{ vector_version }}/vector-{{ vector_version }}-1.x86_64.rpm"
+    dest: "./vector-{{ vector_version }}.x86_64.rpm"
+
+- name: Install vector package
+  become: true
+  ansible.builtin.yum:
+    name:
+      - vector-{{ vector_version }}.x86_64.rpm
+    disable_gpg_check: yes
+  notify: Restart vector service
+
+- name: Create Vector config directory
+  become: true
+  ansible.builtin.file:
+    path: /etc/vector
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Deploy Vector configuration
+  become: true
+  ansible.builtin.template:
+    src: vector.yml.j2
+    dest: /etc/vector/vector.yaml
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart vector service
+
+- name: Ensure Vector is enabled and started
+  become: true
+  ansible.builtin.service:
+    name: vector
+    enabled: yes
+    state: started
+
+
+# tasks file for vector-role
