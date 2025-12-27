@@ -4,14 +4,15 @@ api:
   address: "127.0.0.1:8686"
 
 sources:
-  my_source_id:
+  vector_host:
     type: demo_logs
     interval: 1
+    format: "shuffle"
 
 sinks:
-  my_sink_id:
+  vector_console:
     type: console
     inputs:
-      - my_source_id
+      - vector_host
     encoding:
       codec: json
