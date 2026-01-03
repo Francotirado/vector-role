@@ -37,6 +37,8 @@ Author Information
 
 Roman Perevozchikov
 
+------------------
+
 Выполнение Molecule
 
 ![Ответ на задание](https://github.com/Francotirado/vector-role/blob/main/img/1.jpg)
