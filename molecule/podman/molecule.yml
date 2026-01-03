@@ -1,0 +1,27 @@
+---
+# Dependency management (download roles/collections)
+dependency:
+  name: galaxy
+  options:
+    ignore-certs: false
+    ignore-errors: false
+    role-file: requirements.yml
+    requirements-file: requirements.yml
+
+driver:
+  name: 'podman'
+
+platforms:
+  - name: oraclelinux9
+    image: oraclelinux:9
+    pre_build_image: true
+
+provisioner:
+  name: ansible
+  env:
+    ANSIBLE_REMOTE_TMP: /tmp/.ansible
+    ANSIBLE_LOCAL_TMP: /tmp/.ansible
+  inventory:
+    group_vars:
+      all:
+        ansible_become: false
