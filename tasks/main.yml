@@ -38,6 +38,6 @@
     name: vector
     enabled: yes
     state: started
-
+#  when: ansible_service_mgr == 'systemd'
 
 # tasks file for vector-role

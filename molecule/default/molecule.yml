@@ -1,0 +1,102 @@
+---
+# Dependency management (download roles/collections)
+dependency:
+  name: galaxy
+  options:
+    ignore-certs: false
+    ignore-errors: false
+    role-file: requirements.yml
+    requirements-file: requirements.yml
+
+driver:
+  name: 'docker'
+
+ansible:
+  cfg:
+    defaults:
+      host_key_checking: false
+      verbosity: 1
+    ssh_connection:
+      pipelining: true
+  env:
+    ANSIBLE_FORCE_COLOR: "1"
+    ANSIBLE_LOAD_CALLBACK_PLUGINS: "1"
+
+  executor:
+    backend: ansible-playbook
+    args:
+      ansible_playbook:
+        - --diff
+        - --force-handlers
+      ansible_navigator:
+        - --mode stdout
+        - --pull-policy missing
+        - --execution-environment-image ghcr.io/ansible/community-ansible-dev-tools:latest
+
+  playbooks:
+    create: create.yml
+    converge: converge.yml
+    destroy: destroy.yml
+    cleanup: cleanup.yml
+    prepare: prepare.yml
+    side_effect: side_effect.yml
+    verify: verify.yml
+
+platforms:
+#  - name: 'instance-fedora'
+#    image: 'antmelekhin/docker-systemd:fedora-42'
+#    command: tail -f /dev/null
+#    volumes:
+#      - '/sys/fs/cgroup:/sys/fs/cgroup:rw'
+#      - '/var/lib/containerd'
+#    cgroupns_mode: 'host'
+#    privileged: true
+#    pre_build_image: true
+#    groups:
+#      - 'rhel_family'
+  - name: oraclelinux9
+    image: oraclelinux:9
+    pre_build_image: true
+
+#  - name: fedora42
+#    image: fedora:42
+#    pre_build_image: true
+
+  - name: fedora-42
+    hostname: fedora
+    image: mpaivabarbosa/molecule-systemd-fedora:42
+    command: /sbin/init
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: true
+    override_command: false
+
+provisioner:
+  name: ansible
+  env:
+    ANSIBLE_REMOTE_TMP: /tmp/.ansible
+    ANSIBLE_LOCAL_TMP: /tmp/.ansible
+  inventory:
+    group_vars:
+      all:
+        ansible_become: false
+
+scenario:
+  name: default
+  test_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - idempotence
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
