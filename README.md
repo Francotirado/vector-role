@@ -20,6 +20,12 @@ Including an example of how to use your role (for instance, with variables passe
       roles:
          - { role: vector-role}
 
+Tags
+-------------
+
+Molecule - v1.0.1
+Tox - v1.0.2
+
 License
 -------
 
