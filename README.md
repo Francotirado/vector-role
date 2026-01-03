@@ -36,3 +36,15 @@ Author Information
 ------------------
 
 Roman Perevozchikov
+
+Выполнение Molecule
+
+![Ответ на задание](https://github.com/Francotirado/vector-role/blob/main/img/1.jpg)
+
+Выполнение Tox
+
+![Ответ на задание](https://github.com/Francotirado/vector-role/blob/main/img/2.jpg)
+
+![Ответ на задание](https://github.com/Francotirado/vector-role/blob/main/img/3.jpg)
+
+Выполнение завершается с ошибками только на этапе попытки развертывания приложения через systemd
